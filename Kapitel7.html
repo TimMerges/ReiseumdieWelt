@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Digitale Edition – Kapitel 7</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { display: flex; justify-content: space-between; }
+        .image-section img { max-width: 400px; }
+        .navigation { margin-bottom: 20px; }
+        .tei-container { background: #f4f4f4; padding: 10px; margin-top: 20px; border: 1px solid #ccc; max-height: 400px; overflow-y: scroll; }
+        button { margin: 5px; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Digitale Edition – Kapitel 7</h1>
+    <div class="navigation">
+        <button onclick="previousPage()">&#8592; Vorherige Seite</button>
+        <button onclick="nextPage()">Nächste Seite &#8594;</button>
+        <button onclick="toggleTEI()">TEI-XML anzeigen/verstecken</button>
+    </div>
+
+    <div class="container">
+        <div class="image-section">
+            <img id="pageImage" src="kapitel7/0004_p004.jpg" alt="Seite">
+        </div>
+        <div class="text-section" id="textContent">
+            <!-- Text wird hier dynamisch geladen -->
+        </div>
+    </div>
+
+    <div class="tei-container" id="teiContent" style="display: none;">
+        <!-- TEI-XML wird hier dynamisch geladen -->
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        const pages = [
+            { base: '0004_p004' },
+            { base: '0005_p005' },
+            { base: '0006_p006' },  // Füge hier weitere Seiten hinzu
+        ];
+
+        function loadPage(index) {
+            const page = pages[index];
+            document.getElementById('pageImage').src = `kapitel7/${page.base}.jpg`;
+
+            fetch(`kapitel7/${page.base}.html`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('textContent').innerHTML = data;
+                });
+
+            fetch(`kapitel7/${page.base}.tei.xml`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('teiContent').textContent = data;
+                });
+        }
+
+        function nextPage() {
+            if (currentIndex < pages.length - 1) {
+                currentIndex++;
+                loadPage(currentIndex);
+            }
+        }
+
+        function previousPage() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                loadPage(currentIndex);
+            }
+        }
+
+        function toggleTEI() {
+            const teiContainer = document.getElementById('teiContent');
+            teiContainer.style.display = teiContainer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Initiale Seite laden
+        loadPage(currentIndex);
+    </script>
+</body>
+</html>
