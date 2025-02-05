@@ -69,7 +69,7 @@
 
         function loadPage(index) {
             const page = pages[index];
-            document.getElementById('pageImage').src = `kapitel7/${page.base}.jpg`;
+            document.getElementById('pageImage').src = `Kapitel7/${page.base}.jpg`;
 
             fetch(`kapitel7/${page.base}.html`)
                 .then(response => response.text())
